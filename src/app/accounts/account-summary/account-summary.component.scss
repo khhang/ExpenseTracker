@@ -1,0 +1,42 @@
+$positive: green;
+$negative: red;
+
+ion-card-title {
+  font-size: 34px;
+  font-weight: 600;
+  letter-spacing: 0.1rem;
+}
+
+.account-detail-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #121212;
+
+  &__left {
+    padding-left: 15px;
+    border-left-width: 3px;
+    border-left-style: solid;
+    height: 100%;
+  }
+
+  &__right {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+
+    &__balance {
+      font-size: 16px;
+      letter-spacing: 0.1rem;
+    }
+
+  }
+}
+
+.positive {
+  border-color: $positive;
+}
+
+.negative {
+  border-color: $negative;
+}

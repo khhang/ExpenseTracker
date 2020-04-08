@@ -1,0 +1,23 @@
+<ion-card>
+  <ion-card-header>
+    <ion-card-subtitle>Accounts</ion-card-subtitle>
+    <ion-card-title>{{ getTotalBalance() | currency }}</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <div *ngFor="let accountDetail of accountDetails" class="account-detail-container">
+      <div class="account-detail-container__left" 
+        [ngClass]="{'positive' : accountDetail?.currentBalance > 0, 'negative' : accountDetail?.currentBalance <= 0}">
+        <div>{{accountDetail.name}}</div>
+        <div>{{accountDetail.accountTypeName}}</div>
+      </div>
+      <div class="account-detail-container__right">
+        <span class="account-detail-container__right__balance">{{accountDetail.currentBalance | currency}}</span>
+        <span>
+          <ion-button size="small" color="dark" fill="clear" (click)="openActionsMenu($event, accountDetail)">
+            <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+          </ion-button>
+        </span>
+      </div>
+    </div>
+  </ion-card-content>
+</ion-card>

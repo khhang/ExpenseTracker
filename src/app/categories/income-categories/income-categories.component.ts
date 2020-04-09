@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { IncomeCategory, CategoriesService, ExpenseCategory } from 'src/app/services/categories.service';
 import { ModalController, AlertController } from '@ionic/angular';
 import { ToastService } from 'src/app/services/toast.service';
@@ -9,6 +9,7 @@ import { EditCategoryModalComponent } from '../edit-category-modal/edit-category
   selector: 'app-income-categories',
   templateUrl: './income-categories.component.html',
   styleUrls: ['./income-categories.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class IncomeCategoriesComponent implements OnInit {
 

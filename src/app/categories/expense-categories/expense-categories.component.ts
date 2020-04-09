@@ -4,8 +4,7 @@ import { ModalController, AlertController } from '@ionic/angular';
 import { ToastService } from 'src/app/services/toast.service';
 import { CreateSubcategoryModalComponent } from '../create-subcategory-modal/create-subcategory-modal.component';
 import { EditSubcategoryModalComponent } from '../edit-subcategory-modal/edit-subcategory-modal.component';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { EditCategoryModalComponent } from '../edit-category-modal/edit-category-modal.component';
 
 @Component({

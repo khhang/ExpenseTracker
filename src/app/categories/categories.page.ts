@@ -27,8 +27,11 @@ export class CategoriesPage implements OnInit {
   ngOnInit() {}
 
   async openCreateCategoryModal(): Promise<void> {
+    const currTab = this.tabs.getSelected();
+
     const modal = await this.modalController.create({
-      component: CreateCategoryModalComponent
+      component: CreateCategoryModalComponent,
+      componentProps: { isExpenseCategory: currTab === this.expenseTabKey }
     });
 
     await modal.present();
@@ -36,13 +39,13 @@ export class CategoriesPage implements OnInit {
     await modal.onWillDismiss()
       .then(result => {
         if (result.data) {
-          if (this.tabs.getSelected() === this.expenseTabKey) {
+          if (currTab === this.expenseTabKey) {
             this.categoriesService.createCategory(result.data).subscribe(() => {
               this.categoriesService.refresh$.next(undefined);
               this.toastService.presentToast('Succesfully created a new expense category');
             });
-          } else if (this.tabs.getSelected() === this.incomeTab) {
-            this.categoriesService.createCategory(result.data).subscribe(() => {
+          } else if (currTab === this.incomeTab) {
+            this.categoriesService.createIncomeCategory(result.data).subscribe(() => {
               this.categoriesService.refresh$.next(undefined);
               this.toastService.presentToast('Succesfully created a new expense category');
             });

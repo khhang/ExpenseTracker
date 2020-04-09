@@ -23,7 +23,7 @@
         </ion-button>
       </div>
     </ion-item>
-    <ion-item lines="none">
+    <ion-item *ngIf="showSubcategories" lines="none">
       <ion-button slot="start" size="small" fill="clear" (click)="createSubcategoryClicked(category)">
         <ion-icon name="add"></ion-icon>
         <ion-text>Add Subcategory</ion-text>

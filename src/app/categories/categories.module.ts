@@ -13,6 +13,8 @@ import { CreateCategoryModalComponent } from './create-category-modal/create-cat
 import { EditCategoryModalComponent } from './edit-category-modal/edit-category-modal.component';
 import { CreateSubcategoryModalComponent } from './create-subcategory-modal/create-subcategory-modal.component';
 import { EditSubcategoryModalComponent } from './edit-subcategory-modal/edit-subcategory-modal.component';
+import { IncomeCategoriesComponent } from './income-categories/income-categories.component';
+import { ExpenseCategoriesComponent } from './expense-categories/expense-categories.component';
 
 @NgModule({
   imports: [
@@ -29,7 +31,9 @@ import { EditSubcategoryModalComponent } from './edit-subcategory-modal/edit-sub
     CreateCategoryModalComponent,
     EditCategoryModalComponent,
     CreateSubcategoryModalComponent,
-    EditSubcategoryModalComponent
+    EditSubcategoryModalComponent,
+    ExpenseCategoriesComponent,
+    IncomeCategoriesComponent
   ],
   entryComponents: [
     SubcategoryActionsMenuComponent,

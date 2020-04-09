@@ -1,0 +1,8 @@
+<div class="category-details-container">
+  <category-details *ngFor="let cat of incomeCategories$ | async" 
+    [category]="cat" 
+    [showSubcategories]="false"
+    (editCategory)="openEditCategoryModal($event)"
+    (deleteCategory)="openDeleteCategoryConfirmation($event)">
+  </category-details>
+</div>

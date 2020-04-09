@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { ExpenseDetail, TransactionsService } from '../services/transactions.service';
 
 @Component({
   selector: 'app-transactions',
@@ -7,9 +9,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TransactionsPage implements OnInit {
 
-  constructor() { }
+  expenseDetails$: Observable<ExpenseDetail[]>;
+  title = 'Transactions';
+
+  constructor(
+    private transactionService: TransactionsService
+  ) { }
 
   ngOnInit() {
+    this.expenseDetails$ = this.transactionService.getExpenseDetails();
   }
 
 }

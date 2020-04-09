@@ -1,5 +1,6 @@
 $positive: green;
 $negative: red;
+$white: #dbdbdb;
 
 ion-card-title {
   font-size: 34px;
@@ -28,6 +29,7 @@ ion-card-title {
     &__balance {
       font-size: 16px;
       letter-spacing: 0.1rem;
+      color: $white;
     }
 
   }

@@ -13,6 +13,7 @@ export class CategoryDetailsComponent implements OnInit {
 
   @Input() category: ExpenseCategory;
   @Input() subcategories: ExpenseSubcategory[];
+  @Input() showSubcategories: boolean;
 
   @Output() editCategory: EventEmitter<ExpenseCategory> = new EventEmitter<ExpenseCategory>();
   @Output() deleteCategory: EventEmitter<ExpenseCategory> = new EventEmitter<ExpenseCategory>();

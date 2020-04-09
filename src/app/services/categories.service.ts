@@ -1,12 +1,24 @@
 import { Injectable } from '@angular/core';
 import { environment } from './../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoriesService {
+
+  refresh$: BehaviorSubject<any> = new BehaviorSubject<any>(undefined);
+  expenseCategories$: Observable<ExpenseCategory[]> = this.refresh$.pipe(
+    switchMap(() => this.getCategories())
+  );
+  expenseSubcategories$: Observable<ExpenseSubcategory[]> = this.refresh$.pipe(
+    switchMap(() => this.getSubcategories())
+  );
+  incomeCategories$: Observable<IncomeCategory[]> = this.refresh$.pipe(
+    switchMap(() => this.getIncomeCategories())
+  );
 
   constructor(private http: HttpClient) { }
 
@@ -50,6 +62,31 @@ export class CategoriesService {
     return this.http.delete<any>(`${environment.apiUrl}/expenseSubcategories/${id}`);
   }
 
+  getIncomeCategories(): Observable<IncomeCategory[]> {
+    return this.http.get<IncomeCategory[]>(`${environment.apiUrl}/incomeCategories`);
+  }
+
+  getIncomeCategoryById(id: number): Observable<IncomeCategory> {
+    return this.http.get<IncomeCategory>(`${environment.apiUrl}/incomeCategories/${id}`);
+  }
+
+  createIncomeCategory(incomeCategory: IncomeCategory): Observable<IncomeCategory> {
+    return this.http.post<IncomeCategory>(`${environment.apiUrl}/incomeCategories`, incomeCategory);
+  }
+
+  updateIncomeCategory(incomeCategory: IncomeCategory): Observable<IncomeCategory> {
+    return this.http.put<IncomeCategory>(`${environment.apiUrl}/incomeCategories/${incomeCategory.id}`, incomeCategory);
+  }
+
+  deleteIncomeCategory(id: number): Observable<any> {
+    return this.http.delete<any>(`${environment.apiUrl}/incomeCategories/${id}`);
+  }
+
+}
+
+export interface IncomeCategory {
+  id?: number;
+  name: string;
 }
 
 export interface ExpenseCategory {

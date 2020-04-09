@@ -12,7 +12,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="false">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">{{ title }}</ion-title>
@@ -20,14 +20,15 @@
   </ion-header>
 
   <div id="container">
-    <category-details *ngFor="let cat of expenseCategories$ | async" 
-      [category]="cat" 
-      [subcategories]="expenseSubcategories$ | async"
-      (editCategory)="openEditCategoryModal($event)"
-      (deleteCategory)="openDeleteCategoryConfirmation($event)"
-      (createSubcategory)="openCreateSubcategoryModal($event)"
-      (editSubcategory)="openEditSubcategoryModal($event)"
-      (deleteSubcategory)="openDeleteSubcategoryConfirmation($event)">
-    </category-details> 
+    <ion-tabs>
+      <ion-tab-bar slot="top">
+        <ion-tab-button tab="expense">
+          <ion-label>Expense</ion-label>
+        </ion-tab-button>
+        <ion-tab-button tab="income">
+          <ion-label>Income</ion-label>
+        </ion-tab-button>
+      </ion-tab-bar>
+    </ion-tabs>
   </div>
 </ion-content>

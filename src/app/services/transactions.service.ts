@@ -47,7 +47,7 @@ export interface Expense {
   expenseSubcategoryId?: number;
   accountId: number;
   createDate: string;
-  modifyDate: string;
+  modifyDate?: string;
 }
 
 export interface ExpenseDetail extends Expense {

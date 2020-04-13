@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
 import { ExpenseCategory, ExpenseSubcategory } from 'src/app/services/categories.service';
-import { ModalController, AlertController, PopoverController } from '@ionic/angular';
+import { PopoverController } from '@ionic/angular';
 import { SubcategoryActionsMenuComponent, SubcategoryAction } from '../subcategory-actions-menu/subcategory-actions-menu.component';
 
 @Component({

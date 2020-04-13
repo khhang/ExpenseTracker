@@ -4,6 +4,11 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>{{ title }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="openActionsMenu($event)">
+        <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -16,21 +21,11 @@
 
   <div id="container">
     <ion-list>
-      <ion-item *ngFor="let expenseDetail of expenseDetails$ | async">
-        <div class="expense-detail-container">
-          <div class="expense-detail-container__left">
-            <div class="expense-detail-container__left__description">{{expenseDetail.description}}</div>
-            <div class="expense-detail-container__left__date">{{expenseDetail.createDate | date: 'MM/dd/yyyy'}}</div>
-          </div>
-          <div class="expense-detail-container__right">
-            <span class="expense-detail-container__right__amount">{{expenseDetail.amount | currency}}</span>
-            <span>
-              <ion-button size="small" color="dark" fill="clear" (click)="openActionsMenu($event, expenseDetail)">
-                <ion-icon name="ellipsis-vertical-outline"></ion-icon>
-              </ion-button>
-            </span>
-          </div>
-        </div>
+      <ion-item class="transaction-container" *ngFor="let expenseDetail of expenseDetails$ | async">
+        <expense [expenseDetail]="expenseDetail"
+          (editExpense)="openEditExpenseModal($event)" 
+          (deleteExpense)="openDeleteExpenseConfirmation($event)">
+        </expense>
       </ion-item>
     </ion-list>
   </div>

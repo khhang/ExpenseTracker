@@ -1,0 +1,28 @@
+.expense-detail-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 0;
+
+  &__left {
+    &__date {
+      color: var(--ion-color-medium-shade);
+    }
+
+    div + div {
+      margin-top: 5px;
+    }
+  }
+
+  &__right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &__amount {
+      font-size: 16px;
+      letter-spacing: 0.1rem;
+    }
+
+  }
+}

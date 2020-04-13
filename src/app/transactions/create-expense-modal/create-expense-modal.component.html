@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Add {{isExpense ? 'an Expense' : 'a Contra Expense'}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+  <ion-grid>
+    <form [formGroup]="expenseForm">
+      <ion-row>
+        <ion-col size="12">
+          <ion-item>
+            <ion-label position="stacked">Account <ion-text color="danger">*</ion-text></ion-label>
+            <ion-select interface="popover" placeholder="Select account" formControlName="account">
+              <ion-select-option *ngFor="let account of accounts$ | async" [value]="account.id">{{account.name}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12">
+          <ion-item>
+            <ion-label position="stacked">Description <ion-text color="danger">*</ion-text></ion-label>
+            <ion-textarea type="text" placeholder="Descripion" formControlName="description"></ion-textarea>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12">
+          <ion-item>
+            <ion-label position="stacked">Amount ($) <ion-text color="danger">*</ion-text></ion-label>
+            <ion-input numeric numericType="decimal" type="text" placeholder="0" formControlName="amount"></ion-input>              
+          </ion-item>
+        </ion-col>
+        <ion-col size="12">
+          <ion-item>
+            <ion-label position="stacked">Category <ion-text color="danger">*</ion-text></ion-label>
+            <ion-select interface="popover" placeholder="Select one" formControlName="category">
+              <ion-select-option *ngFor="let cat of expenseCategories$ | async" [value]="cat.id">{{cat.name}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12">
+          <ion-item>
+            <ion-label position="stacked">Subcategory</ion-label>
+            <ion-select interface="popover" placeholder="Select one" formControlName="subcategory">
+              <ion-select-option *ngFor="let sub of expenseSubcategories$ | async" [value]="sub.id">{{sub.name}}</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12">
+          <ion-item>
+            <ion-label position="stacked">Date</ion-label>
+            <ion-datetime displayFormat="MM/DD/YYYY" formControlName="date"></ion-datetime>
+          </ion-item>
+        </ion-col>
+        <ion-col size="12">
+          <div class="ion-float-right">
+            <ion-button color="primary" fill="clear" [disabled]="expenseForm.invalid" (click)="dismissModal(expenseForm.value)">OK</ion-button>
+            <ion-button color="secondary" fill="medium" (click)="dismissModal()">Cancel</ion-button>
+          </div>
+        </ion-col>
+      </ion-row>
+    </form>
+  </ion-grid>
+</ion-content>

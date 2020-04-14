@@ -18,6 +18,10 @@ ion-menu-button {
   text-decoration: none;
 }
 
+#container ion-list {
+  padding-top: 0;
+}
+
 ion-content ion-toolbar {
   --background: transparent;
 }

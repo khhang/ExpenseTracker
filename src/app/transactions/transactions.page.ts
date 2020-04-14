@@ -4,7 +4,7 @@ import { ExpenseDetail, TransactionsService } from '../services/transactions.ser
 import { PopoverController, ModalController, AlertController } from '@ionic/angular';
 import { TransactionsActionsMenuComponent, TransactionAction } from './transactions-actions-menu/transactions-actions-menu.component';
 import { CreateExpenseModalComponent } from './create-expense-modal/create-expense-modal.component';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, map } from 'rxjs/operators';
 import { ToastService } from '../services/toast.service';
 import { EditExpenseModalComponent } from './edit-expense-modal/edit-expense-modal.component';
 
@@ -14,9 +14,26 @@ import { EditExpenseModalComponent } from './edit-expense-modal/edit-expense-mod
   styleUrls: ['./transactions.page.scss'],
 })
 export class TransactionsPage implements OnInit {
+  dateGroupedDetails: any;
   refresh$: BehaviorSubject<undefined> = new BehaviorSubject<undefined>(undefined);
   expenseDetails$: Observable<ExpenseDetail[]> = this.refresh$.pipe(
-    switchMap(() => this.transactionService.getExpenseDetails())
+    switchMap(() => this.transactionService.getExpenseDetails()),
+    map(expenseDetails => {
+      const dateGroupedDetails = {};
+
+      expenseDetails.forEach(ed => {
+        const date = ed.createDate.slice(0, 10);
+        if (dateGroupedDetails[date]) {
+          dateGroupedDetails[date].push(ed);
+        } else {
+          dateGroupedDetails[date] = [ed];
+        }
+      });
+
+      this.dateGroupedDetails = dateGroupedDetails;
+
+      return expenseDetails;
+    })
   );
   title = 'Transactions';
 
@@ -29,6 +46,21 @@ export class TransactionsPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    // TODO: Clean this mess up if we're grouping by date
+    this.transactionService.getExpenseDetails().subscribe((expenseDetails) => {
+      const dateGroupedDetails = {};
+
+      expenseDetails.forEach(ed => {
+        const date = ed.createDate.slice(0, 10);
+        if (dateGroupedDetails[date]) {
+          dateGroupedDetails[date].push(ed);
+        } else {
+          dateGroupedDetails[date] = [ed];
+        }
+      });
+
+      this.dateGroupedDetails = dateGroupedDetails;
+    });
   }
 
   async openCreateExpenseModal(isExpense: boolean = true) {

@@ -21,12 +21,19 @@
 
   <div id="container">
     <ion-list>
-      <ion-item class="transaction-container" *ngFor="let expenseDetail of expenseDetails$ | async">
-        <expense [expenseDetail]="expenseDetail"
-          (editExpense)="openEditExpenseModal($event)" 
-          (deleteExpense)="openDeleteExpenseConfirmation($event)">
-        </expense>
-      </ion-item>
+      <ion-item-group *ngFor="let group of dateGroupedDetails | keyvalue">
+        <ion-item-divider>
+          <ion-label>
+            <ion-text>{{group.key | date: 'MMM dd, yyyy'}}</ion-text>
+          </ion-label>
+        </ion-item-divider>
+        <ion-item class="transaction-container" *ngFor="let expenseDetail of group.value">
+          <expense [expenseDetail]="expenseDetail"
+            (editExpense)="openEditExpenseModal($event)" 
+            (deleteExpense)="openDeleteExpenseConfirmation($event)">
+          </expense>
+        </ion-item>
+      </ion-item-group>
     </ion-list>
   </div>
 </ion-content>

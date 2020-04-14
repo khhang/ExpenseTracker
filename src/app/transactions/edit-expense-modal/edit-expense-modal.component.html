@@ -10,7 +10,7 @@
         <ion-col size="12">
           <ion-item>
             <ion-label position="stacked">Account <ion-text color="danger">*</ion-text></ion-label>
-            <ion-select placeholder="Select account" formControlName="account">
+            <ion-select interface="popover" placeholder="Select account" formControlName="account">
               <ion-select-option *ngFor="let account of accounts" [value]="account.id">{{account.name}}</ion-select-option>
             </ion-select>
           </ion-item>
@@ -30,7 +30,7 @@
         <ion-col size="12">
           <ion-item>
             <ion-label position="stacked">Category <ion-text color="danger">*</ion-text></ion-label>
-            <ion-select placeholder="Select one" formControlName="category">
+            <ion-select interface="popover" placeholder="Select one" formControlName="category">
               <ion-select-option *ngFor="let cat of expenseCategories" [value]="cat.id">{{cat.name}}</ion-select-option>
             </ion-select>
           </ion-item>
@@ -38,7 +38,7 @@
         <ion-col size="12">
           <ion-item>
             <ion-label position="stacked">Subcategory</ion-label>
-            <ion-select placeholder="Select one" formControlName="subcategory">
+            <ion-select interface="popover" placeholder="Select one" formControlName="subcategory">
               <ion-select-option *ngFor="let sub of availableSubcategories" [value]="sub.id">{{sub.name}}</ion-select-option>
             </ion-select>
           </ion-item>

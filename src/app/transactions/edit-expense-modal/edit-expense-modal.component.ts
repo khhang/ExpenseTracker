@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, forkJoin } from 'rxjs';
 import { ExpenseCategory, ExpenseSubcategory, CategoriesService } from 'src/app/services/categories.service';
 import { switchMap, map } from 'rxjs/operators';
 import { FormGroup, Validators, FormControl, FormBuilder } from '@angular/forms';
@@ -18,22 +18,12 @@ export class EditExpenseModalComponent implements OnInit {
   readonly CATEGORY_KEY = 'category';
   readonly SUBCATEGORY_KEY = 'subcategory';
 
-  expenseCategories$: Observable<ExpenseCategory[]> = this.categoriesService.expenseCategories$;
-  updateSubcategories$: BehaviorSubject<undefined> = new BehaviorSubject<undefined>(undefined);
-  expenseSubcategories$: Observable<ExpenseSubcategory[]> = this.updateSubcategories$.pipe(
-    switchMap(() => this.categoriesService.expenseSubcategories$),
-    map(subcats => {
-      const categoryId = this.category.value;
-      const availableSubcategories = subcats.filter(x => x.categoryId === categoryId);
-      if (availableSubcategories.length > 0) {
-        this.subcategory.enable();
-      }
-      return availableSubcategories;
-    })
-  );
+  expenseCategories: ExpenseCategory[];
+  expenseSubcategories: ExpenseSubcategory[];
+  availableSubcategories: ExpenseSubcategory[];
+  accounts: Account[];
 
-  expenseDetail: ExpenseDetail;
-  accounts$: Observable<Account[]> = this.accountsService.getAccounts();
+  expenseDetail: ExpenseDetail = this.navParams.data as ExpenseDetail;
   isExpense: boolean;
 
   expenseForm: FormGroup = this.fb.group({
@@ -42,7 +32,7 @@ export class EditExpenseModalComponent implements OnInit {
     amount: ['', Validators.required],
     category: [null, Validators.required],
     subcategory: [{value: '', disabled: true}],
-    date: new Date().toUTCString()
+    date: ''
   });
 
   get category(): FormControl { return this.expenseForm.controls[this.CATEGORY_KEY] as FormControl; }
@@ -59,16 +49,50 @@ export class EditExpenseModalComponent implements OnInit {
 
   ngOnInit() {
     this.isExpense = this.navParams.data.isExpense;
-
-    this.category.valueChanges.subscribe(() => {
-      this.subcategory.patchValue('', { emitEvent: false });
-      this.subcategory.disable();
-      this.updateSubcategories$.next(undefined);
-    });
-
     this.expenseDetail = this.navParams.data as ExpenseDetail;
 
-    // TODO: Set the form values using expense detail
+    const sources: DropdownObservables = {
+      expenseCategories: this.categoriesService.getCategories(),
+      expenseSubcategories: this.categoriesService.getSubcategories(),
+      accounts: this.accountsService.getAccounts()
+    };
+
+    forkJoin(sources).subscribe((result: DropdownRequest) => {
+      console.log(result);
+      this.expenseCategories = result.expenseCategories;
+      this.expenseSubcategories = result.expenseSubcategories;
+      this.accounts = result.accounts;
+
+      this.updateSubcategories(this.expenseDetail.expenseCategoryId);
+
+      setTimeout(() => {
+        this.expenseForm.setValue({
+          account: this.expenseDetail.accountId,
+          description: this.expenseDetail.description,
+          amount: this.expenseDetail.amount,
+          category: this.expenseDetail.expenseCategoryId,
+          subcategory: this.expenseDetail.expenseSubcategoryId,
+          date: this.expenseDetail.createDate
+        });
+
+        this.category.valueChanges.subscribe((value) => {
+          console.log('updating');
+          this.updateSubcategories(value);
+          this.cdr.markForCheck();
+        });
+      }, 0);
+
+      this.cdr.markForCheck();
+    });
+  }
+
+  updateSubcategories(categoryId: number): void {
+    this.subcategory.patchValue('');
+    this.subcategory.disable();
+    this.availableSubcategories = this.expenseSubcategories.filter(subcat => subcat.categoryId === categoryId);
+    if (this.availableSubcategories.length > 0) {
+      this.subcategory.enable();
+    }
   }
 
   dismissModal(formValues: EditExpenseForm): void {
@@ -96,4 +120,16 @@ export interface EditExpenseForm {
   category: number;
   subcategory: number;
   date: string;
+}
+
+export interface DropdownObservables {
+  expenseCategories: Observable<ExpenseCategory[]>;
+  expenseSubcategories: Observable<ExpenseSubcategory[]>;
+  accounts: Observable<Account[]>;
+}
+
+export interface DropdownRequest {
+  expenseCategories: ExpenseCategory[];
+  expenseSubcategories: ExpenseSubcategory[];
+  accounts: Account[];
 }

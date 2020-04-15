@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { ExpenseDetail, TransactionsService } from '../services/transactions.service';
 import { PopoverController, ModalController, AlertController } from '@ionic/angular';
@@ -12,13 +12,14 @@ import { EditExpenseModalComponent } from './edit-expense-modal/edit-expense-mod
   selector: 'transactions',
   templateUrl: './transactions.page.html',
   styleUrls: ['./transactions.page.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TransactionsPage implements OnInit {
-  dateGroupedDetails: any;
+  transactions: TransactionByDate[];
   refresh$: BehaviorSubject<undefined> = new BehaviorSubject<undefined>(undefined);
-  expenseDetails$: Observable<ExpenseDetail[]> = this.refresh$.pipe(
+  transactions$: Observable<TransactionByDate[]> = this.refresh$.pipe(
     switchMap(() => this.transactionService.getExpenseDetails()),
-    map(expenseDetails => {
+    map((expenseDetails) => {
       const dateGroupedDetails = {};
 
       expenseDetails.forEach(ed => {
@@ -30,9 +31,7 @@ export class TransactionsPage implements OnInit {
         }
       });
 
-      this.dateGroupedDetails = dateGroupedDetails;
-
-      return expenseDetails;
+      return this.buildTransactionsByDate(dateGroupedDetails);
     })
   );
   title = 'Transactions';
@@ -42,25 +41,26 @@ export class TransactionsPage implements OnInit {
     private popoverController: PopoverController,
     private modalController: ModalController,
     private toastService: ToastService,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
-    // TODO: Clean this mess up if we're grouping by date
-    this.transactionService.getExpenseDetails().subscribe((expenseDetails) => {
-      const dateGroupedDetails = {};
+  }
 
-      expenseDetails.forEach(ed => {
-        const date = ed.createDate.slice(0, 10);
-        if (dateGroupedDetails[date]) {
-          dateGroupedDetails[date].push(ed);
-        } else {
-          dateGroupedDetails[date] = [ed];
-        }
-      });
+  buildTransactionsByDate(dateGroupedDetails: any): TransactionByDate[] {
+    const results = [];
 
-      this.dateGroupedDetails = dateGroupedDetails;
+    Object.keys(dateGroupedDetails).forEach((key: string) => {
+      const expenseDetailsByDate = {
+        date: key,
+        data: dateGroupedDetails[key]
+      };
+
+      results.push(expenseDetailsByDate);
     });
+
+    return results.sort((a, b) => b.date.localeCompare(a.date));
   }
 
   async openCreateExpenseModal(isExpense: boolean = true) {
@@ -126,4 +126,9 @@ export class TransactionsPage implements OnInit {
       });
   }
 
+}
+
+export interface TransactionByDate {
+  date: string;
+  data: any[];
 }

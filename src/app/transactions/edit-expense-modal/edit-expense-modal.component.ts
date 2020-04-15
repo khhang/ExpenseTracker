@@ -99,6 +99,7 @@ export class EditExpenseModalComponent implements OnInit {
     let expense: Expense;
     if (formValues) {
       expense = {
+        id: this.expenseDetail.id,
         accountId: formValues.account,
         description: formValues.description,
         amount: parseFloat(formValues.amount) ? parseFloat(formValues.amount) : 0,

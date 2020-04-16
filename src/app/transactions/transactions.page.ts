@@ -7,6 +7,7 @@ import { CreateExpenseModalComponent } from './create-expense-modal/create-expen
 import { switchMap, map } from 'rxjs/operators';
 import { ToastService } from '../services/toast.service';
 import { EditExpenseModalComponent } from './edit-expense-modal/edit-expense-modal.component';
+import { CreateTransferModalComponent } from './create-transfer-modal/create-transfer-modal.component';
 
 @Component({
   selector: 'transactions',
@@ -63,7 +64,7 @@ export class TransactionsPage implements OnInit {
     return results.sort((a, b) => b.date.localeCompare(a.date));
   }
 
-  async openCreateExpenseModal(isExpense: boolean = true) {
+  async openCreateExpenseModal(isExpense: boolean = true): Promise<void> {
     const modal = await this.modalController.create({
       component: CreateExpenseModalComponent,
       componentProps: { isExpense }
@@ -101,6 +102,24 @@ export class TransactionsPage implements OnInit {
       });
   }
 
+  async openCreateTransferModal(): Promise<void> {
+    const modal = await this.modalController.create({
+      component: CreateTransferModalComponent
+    });
+
+    await modal.present();
+
+    await modal.onWillDismiss()
+      .then(newTransfer => {
+        if (newTransfer.data) {
+          this.transactionService.createTransfer(newTransfer.data).subscribe(() => {
+            this.refresh$.next(undefined)
+            this.toastService.presentToast('Created a new transfer');
+          });
+        }
+      });
+  }
+
   async openActionsMenu(e: any): Promise<void> {
     const popover = await this.popoverController.create({
       component: TransactionsActionsMenuComponent,
@@ -121,6 +140,12 @@ export class TransactionsPage implements OnInit {
               break;
             case TransactionAction.CREATE_CONTRAEXPENSE:
               this.openCreateExpenseModal(false);
+              break;
+            case TransactionAction.CREATE_TRANSFER:
+              this.openCreateTransferModal();
+              break;
+            default:
+              break;
           }
         }
       });

@@ -37,6 +37,10 @@ export class TransactionsService {
   getExpenseDetailById(id: number): Observable<ExpenseDetail> {
     return this.http.get<ExpenseDetail>(`${environment.apiUrl}/expenses/details/${id}`);
   }
+
+  createTransfer(transfer: ClientTransfer): Observable<TransferLink> {
+    return this.http.post<TransferLink>(`${environment.apiUrl}/transfer`, transfer);
+  }
 }
 
 export interface Expense {
@@ -54,4 +58,20 @@ export interface ExpenseDetail extends Expense {
   accountName: string;
   expenseCategoryName: string;
   expenseSubcategoryName: string;
+}
+
+export interface ClientTransfer {
+  id?: number;
+  sourceAccountId: number;
+  destinationAccountId: number;
+  amount: number;
+  createDate?: string;
+}
+
+export interface TransferLink {
+  id?: number;
+  sourceAccountId: number;
+  destinationAccountId: number;
+  createDate?: string;
+  modifyDate?: string;
 }

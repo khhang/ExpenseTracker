@@ -31,8 +31,6 @@ export class EditSubcategoryModalComponent implements OnInit {
     this.categoriesService.getCategories().subscribe((cats) => {
       this.categories = cats;
 
-      console.log(this.navParams.data);
-
       this.subcategory = this.navParams.data as ExpenseSubcategory;
 
       setTimeout(() => {

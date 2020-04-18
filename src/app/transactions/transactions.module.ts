@@ -13,6 +13,8 @@ import { ExpenseComponent } from './expense/expense.component';
 import { ExpenseActionsMenuComponent } from './expense-actions-menu/expense-actions-menu.component';
 import { EditExpenseModalComponent } from './edit-expense-modal/edit-expense-modal.component';
 import { CreateTransferModalComponent } from './create-transfer-modal/create-transfer-modal.component';
+import { CreateReimbursementModalComponent } from './create-reimbursement-modal/create-reimbursement-modal.component';
+import { EditReimbursementModalComponent } from './edit-reimbursement-modal/edit-reimbursement-modal.component';
 
 @NgModule({
   imports: [
@@ -29,14 +31,18 @@ import { CreateTransferModalComponent } from './create-transfer-modal/create-tra
     ExpenseComponent,
     ExpenseActionsMenuComponent,
     EditExpenseModalComponent,
-    CreateTransferModalComponent
+    CreateTransferModalComponent,
+    CreateReimbursementModalComponent,
+    EditReimbursementModalComponent
   ],
   entryComponents: [
     TransactionsActionsMenuComponent,
     CreateExpenseModalComponent,
     ExpenseActionsMenuComponent,
     EditExpenseModalComponent,
-    CreateTransferModalComponent
+    CreateTransferModalComponent,
+    CreateReimbursementModalComponent,
+    EditReimbursementModalComponent
   ]
 })
 export class TransactionsPageModule {}

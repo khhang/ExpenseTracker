@@ -41,6 +41,26 @@ export class TransactionsService {
   createTransfer(transfer: ClientTransfer): Observable<TransferLink> {
     return this.http.post<TransferLink>(`${environment.apiUrl}/transfer`, transfer);
   }
+
+  getReimbursements(): Observable<Reimbursement[]> {
+    return this.http.get<Reimbursement[]>(`${environment.apiUrl}/reimbursements`);
+  }
+
+  getReimbursementById(id: number): Observable<Reimbursement> {
+    return this.http.get<Reimbursement>(`${environment.apiUrl}/reimbursements/${id}`);
+  }
+
+  createReimbursement(reimbursement: Reimbursement): Observable<Reimbursement> {
+    return this.http.post<Reimbursement>(`${environment.apiUrl}/reimbursements`, reimbursement);
+  }
+
+  updateReimbursement(reimbursement: Reimbursement): Observable<Reimbursement> {
+    return this.http.put<Reimbursement>(`${environment.apiUrl}/reimbursements/${reimbursement.id}`, reimbursement);
+  }
+
+  deleteReimbursement(id: number): Observable<any> {
+    return this.http.delete<any>(`${environment.apiUrl}/reimbursements/${id}`);
+  }
 }
 
 export interface Expense {
@@ -74,4 +94,21 @@ export interface TransferLink {
   destinationAccountId: number;
   createDate?: string;
   modifyDate?: string;
+}
+
+export interface Reimbursement {
+  id?: number;
+  description: string;
+  amount: number;
+  expenseCategoryId: number;
+  expenseSubcategoryId?: number;
+  accountId: number;
+  createDate: string;
+  modifyDate?: string;
+}
+
+export interface ReimbursementDetail extends Reimbursement {
+  accountName: string;
+  expenseCategoryName: string;
+  expenseSubcategoryName: string;
 }

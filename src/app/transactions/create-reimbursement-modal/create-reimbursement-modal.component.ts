@@ -1,19 +1,19 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CategoriesService, ExpenseCategory, ExpenseSubcategory } from 'src/app/services/categories.service';
 import { AccountsService, Account } from 'src/app/services/accounts.service';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
-import { Expense } from 'src/app/services/transactions.service';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
+import { Reimbursement } from 'src/app/services/transactions.service';
 
 @Component({
-  selector: 'create-expense-modal',
-  templateUrl: './create-expense-modal.component.html',
-  styleUrls: ['./create-expense-modal.component.scss'],
+  selector: 'create-reimbursement-modal',
+  templateUrl: './create-reimbursement-modal.component.html',
+  styleUrls: ['./create-reimbursement-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CreateExpenseModalComponent implements OnInit {
+export class CreateReimbursementModalComponent implements OnInit {
 
   readonly CATEGORY_KEY = 'category';
   readonly SUBCATEGORY_KEY = 'subcategory';
@@ -34,8 +34,7 @@ export class CreateExpenseModalComponent implements OnInit {
 
   accounts$: Observable<Account[]> = this.accountsService.getAccounts();
 
-  // TODO: Double check date-time format
-  expenseForm: FormGroup = this.fb.group({
+  reimbursementForm: FormGroup = this.fb.group({
     account: ['', Validators.required],
     description: ['', Validators.required],
     amount: ['', Validators.required],
@@ -44,8 +43,8 @@ export class CreateExpenseModalComponent implements OnInit {
     date: new Date().toUTCString()
   });
 
-  get category(): FormControl { return this.expenseForm.controls[this.CATEGORY_KEY] as FormControl; }
-  get subcategory(): FormControl { return this.expenseForm.controls[this.SUBCATEGORY_KEY] as FormControl; }
+  get category(): FormControl { return this.reimbursementForm.controls[this.CATEGORY_KEY] as FormControl; }
+  get subcategory(): FormControl { return this.reimbursementForm.controls[this.SUBCATEGORY_KEY] as FormControl; }
 
   constructor(
     private categoriesService: CategoriesService,
@@ -55,7 +54,6 @@ export class CreateExpenseModalComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
     this.category.valueChanges.subscribe(() => {
       this.subcategory.patchValue('', { emitEvent: false });
       this.subcategory.disable();
@@ -63,8 +61,8 @@ export class CreateExpenseModalComponent implements OnInit {
     });
   }
 
-  dismissModal(formValues: CreateExpenseForm): void {
-    let expense: Expense;
+  dismissModal(formValues: CreateReimbursementForm): void {
+    let expense: Reimbursement;
     if (formValues) {
       expense = {
         accountId: formValues.account,
@@ -81,7 +79,7 @@ export class CreateExpenseModalComponent implements OnInit {
 
 }
 
-export interface CreateExpenseForm {
+export interface CreateReimbursementForm {
   account: number;
   description: string;
   amount: string;

@@ -11,7 +11,7 @@ export class TransactionsActionsMenuComponent implements OnInit {
 
   actions: TransactionMenuItem[] = [
     { id: TransactionAction.CREATE_EXPENSE, label: 'Add an Expense' },
-    { id: TransactionAction.CREATE_CONTRAEXPENSE, label: 'Add a Contraexpense'},
+    { id: TransactionAction.CREATE_REIMBURSEMENT, label: 'Add a Reimbursement'},
     { id: TransactionAction.CREATE_TRANSFER, label: 'Create a Transfer ' },
     { id: TransactionAction.CREATE_DEPOSIT, label: 'Create a Deposit' },
     { id: TransactionAction.CREATE_WITHDRAWAL, label: 'Create a Withdrawal'}
@@ -35,7 +35,7 @@ export interface TransactionMenuItem {
 export enum TransactionAction {
   CREATE_TRANSFER,
   CREATE_EXPENSE,
-  CREATE_CONTRAEXPENSE,
+  CREATE_REIMBURSEMENT,
   CREATE_DEPOSIT,
   CREATE_WITHDRAWAL
 }

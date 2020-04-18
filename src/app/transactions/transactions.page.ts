@@ -8,6 +8,7 @@ import { switchMap, map } from 'rxjs/operators';
 import { ToastService } from '../services/toast.service';
 import { EditExpenseModalComponent } from './edit-expense-modal/edit-expense-modal.component';
 import { CreateTransferModalComponent } from './create-transfer-modal/create-transfer-modal.component';
+import { CreateReimbursementModalComponent } from './create-reimbursement-modal/create-reimbursement-modal.component';
 
 @Component({
   selector: 'transactions',
@@ -64,10 +65,9 @@ export class TransactionsPage implements OnInit {
     return results.sort((a, b) => b.date.localeCompare(a.date));
   }
 
-  async openCreateExpenseModal(isExpense: boolean = true): Promise<void> {
+  async openCreateExpenseModal(): Promise<void> {
     const modal = await this.modalController.create({
-      component: CreateExpenseModalComponent,
-      componentProps: { isExpense }
+      component: CreateExpenseModalComponent
     });
 
     await modal.present();
@@ -113,9 +113,27 @@ export class TransactionsPage implements OnInit {
       .then(newTransfer => {
         if (newTransfer.data) {
           this.transactionService.createTransfer(newTransfer.data).subscribe(() => {
-            this.refresh$.next(undefined)
+            this.refresh$.next(undefined);
             this.toastService.presentToast('Created a new transfer');
           });
+        }
+      });
+  }
+
+  async openCreateReimbursementModal(): Promise<void> {
+    const modal = await this.modalController.create({
+      component: CreateReimbursementModalComponent
+    });
+
+    await modal.present();
+
+    await modal.onWillDismiss()
+      .then(newReimbursement => {
+        if (newReimbursement.data) {
+          this.transactionService.createReimbursement(newReimbursement.data).subscribe(() => {
+            this.refresh$.next(undefined);
+            this.toastService.presentToast('Created a new reimbursement');
+          })
         }
       });
   }
@@ -136,10 +154,10 @@ export class TransactionsPage implements OnInit {
 
           switch (action.id) {
             case TransactionAction.CREATE_EXPENSE:
-              this.openCreateExpenseModal(true);
+              this.openCreateExpenseModal();
               break;
-            case TransactionAction.CREATE_CONTRAEXPENSE:
-              this.openCreateExpenseModal(false);
+            case TransactionAction.CREATE_REIMBURSEMENT:
+              this.openCreateReimbursementModal();
               break;
             case TransactionAction.CREATE_TRANSFER:
               this.openCreateTransferModal();
@@ -149,6 +167,30 @@ export class TransactionsPage implements OnInit {
           }
         }
       });
+  }
+
+  async openDeleteExpenseConfirmation(expenseDetail: ExpenseDetail): Promise<void> {
+    const alert = await this.alertController.create({
+      header: 'Delete Expense',
+      message: `Are you sure you want to delete the expense: ${expenseDetail.description}?`,
+      buttons: [
+        {
+          text: 'Yes',
+          handler: () => {
+            this.transactionService.deleteExpense(expenseDetail.id).subscribe(() => {
+              this.refresh$.next(undefined);
+              this.toastService.presentToast('Deleted an expense');
+            });
+          }
+        },
+        {
+          text: 'Cancel',
+          cssClass: 'secondary'
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
 }

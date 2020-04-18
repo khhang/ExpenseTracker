@@ -1,19 +1,19 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { Observable, BehaviorSubject, forkJoin } from 'rxjs';
 import { ExpenseCategory, ExpenseSubcategory, CategoriesService } from 'src/app/services/categories.service';
-import { switchMap, map } from 'rxjs/operators';
+import { ReimbursementDetail, Reimbursement } from 'src/app/services/transactions.service';
 import { FormGroup, Validators, FormControl, FormBuilder } from '@angular/forms';
 import { AccountsService, Account } from 'src/app/services/accounts.service';
 import { NavParams, ModalController } from '@ionic/angular';
-import { Expense, ExpenseDetail } from 'src/app/services/transactions.service';
+import { DropdownObservables, DropdownRequest } from '../edit-expense-modal/edit-expense-modal.component';
+import { forkJoin } from 'rxjs';
 
 @Component({
-  selector: 'edit-expense-modal',
-  templateUrl: './edit-expense-modal.component.html',
-  styleUrls: ['./edit-expense-modal.component.scss'],
+  selector: 'edit-reimbursement-modal',
+  templateUrl: './edit-reimbursement-modal.component.html',
+  styleUrls: ['./edit-reimbursement-modal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EditExpenseModalComponent implements OnInit {
+export class EditReimbursementModalComponent implements OnInit {
 
   readonly CATEGORY_KEY = 'category';
   readonly SUBCATEGORY_KEY = 'subcategory';
@@ -23,7 +23,8 @@ export class EditExpenseModalComponent implements OnInit {
   availableSubcategories: ExpenseSubcategory[];
   accounts: Account[];
 
-  expenseDetail: ExpenseDetail = this.navParams.data as ExpenseDetail;
+  reimbursementDetail: ReimbursementDetail = this.navParams.data as ReimbursementDetail;
+  isExpense: boolean;
 
   expenseForm: FormGroup = this.fb.group({
     account: ['', Validators.required],
@@ -47,7 +48,7 @@ export class EditExpenseModalComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.expenseDetail = this.navParams.data as ExpenseDetail;
+    this.reimbursementDetail = this.navParams.data as ReimbursementDetail;
 
     const sources: DropdownObservables = {
       expenseCategories: this.categoriesService.getCategories(),
@@ -60,16 +61,16 @@ export class EditExpenseModalComponent implements OnInit {
       this.expenseSubcategories = result.expenseSubcategories;
       this.accounts = result.accounts;
 
-      this.updateSubcategories(this.expenseDetail.expenseCategoryId);
+      this.updateSubcategories(this.reimbursementDetail.expenseCategoryId);
 
       setTimeout(() => {
         this.expenseForm.setValue({
-          account: this.expenseDetail.accountId,
-          description: this.expenseDetail.description,
-          amount: this.expenseDetail.amount,
-          category: this.expenseDetail.expenseCategoryId,
-          subcategory: this.expenseDetail.expenseSubcategoryId,
-          date: this.expenseDetail.createDate
+          account: this.reimbursementDetail.accountId,
+          description: this.reimbursementDetail.description,
+          amount: this.reimbursementDetail.amount,
+          category: this.reimbursementDetail.expenseCategoryId,
+          subcategory: this.reimbursementDetail.expenseSubcategoryId,
+          date: this.reimbursementDetail.createDate
         });
 
         this.category.valueChanges.subscribe((value) => {
@@ -91,11 +92,11 @@ export class EditExpenseModalComponent implements OnInit {
     }
   }
 
-  dismissModal(formValues: EditExpenseForm): void {
-    let expense: Expense;
+  dismissModal(formValues: EditReimbursementForm): void {
+    let expense: Reimbursement;
     if (formValues) {
       expense = {
-        id: this.expenseDetail.id,
+        id: this.reimbursementDetail.id,
         accountId: formValues.account,
         description: formValues.description,
         amount: parseFloat(formValues.amount) ? parseFloat(formValues.amount) : 0,
@@ -110,23 +111,11 @@ export class EditExpenseModalComponent implements OnInit {
 
 }
 
-export interface EditExpenseForm {
+export interface EditReimbursementForm {
   account: number;
   description: string;
   amount: string;
   category: number;
   subcategory: number;
   date: string;
-}
-
-export interface DropdownObservables {
-  expenseCategories: Observable<ExpenseCategory[]>;
-  expenseSubcategories: Observable<ExpenseSubcategory[]>;
-  accounts: Observable<Account[]>;
-}
-
-export interface DropdownRequest {
-  expenseCategories: ExpenseCategory[];
-  expenseSubcategories: ExpenseSubcategory[];
-  accounts: Account[];
 }

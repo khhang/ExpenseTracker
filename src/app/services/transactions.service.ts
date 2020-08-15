@@ -83,7 +83,8 @@ export interface ExpenseDetail extends Expense {
 export interface ClientTransfer {
   id?: number;
   sourceAccountId: number;
-  destinationAccountId: number;
+  destinationAccountId?: number;
+  incomeCategoryId?: number;
   amount: number;
   createDate?: string;
 }

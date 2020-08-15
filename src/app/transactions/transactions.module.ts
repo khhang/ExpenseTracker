@@ -15,6 +15,8 @@ import { EditExpenseModalComponent } from './edit-expense-modal/edit-expense-mod
 import { CreateTransferModalComponent } from './create-transfer-modal/create-transfer-modal.component';
 import { CreateReimbursementModalComponent } from './create-reimbursement-modal/create-reimbursement-modal.component';
 import { EditReimbursementModalComponent } from './edit-reimbursement-modal/edit-reimbursement-modal.component';
+import { CreateDepositModalComponent } from './create-deposit-modal/create-deposit-modal.component';
+import { CreateWithdrawalModalComponent } from './create-withdrawal-modal/create-withdrawal-modal.component';
 
 @NgModule({
   imports: [
@@ -33,7 +35,9 @@ import { EditReimbursementModalComponent } from './edit-reimbursement-modal/edit
     EditExpenseModalComponent,
     CreateTransferModalComponent,
     CreateReimbursementModalComponent,
-    EditReimbursementModalComponent
+    EditReimbursementModalComponent,
+    CreateDepositModalComponent,
+    CreateWithdrawalModalComponent
   ],
   entryComponents: [
     TransactionsActionsMenuComponent,
@@ -42,7 +46,9 @@ import { EditReimbursementModalComponent } from './edit-reimbursement-modal/edit
     EditExpenseModalComponent,
     CreateTransferModalComponent,
     CreateReimbursementModalComponent,
-    EditReimbursementModalComponent
+    EditReimbursementModalComponent,
+    CreateDepositModalComponent,
+    CreateWithdrawalModalComponent
   ]
 })
 export class TransactionsPageModule {}

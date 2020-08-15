@@ -9,6 +9,8 @@ import { ToastService } from '../services/toast.service';
 import { EditExpenseModalComponent } from './edit-expense-modal/edit-expense-modal.component';
 import { CreateTransferModalComponent } from './create-transfer-modal/create-transfer-modal.component';
 import { CreateReimbursementModalComponent } from './create-reimbursement-modal/create-reimbursement-modal.component';
+import { CreateDepositModalComponent } from './create-deposit-modal/create-deposit-modal.component';
+import { CreateWithdrawalModalComponent } from './create-withdrawal-modal/create-withdrawal-modal.component';
 
 @Component({
   selector: 'transactions',
@@ -138,6 +140,42 @@ export class TransactionsPage implements OnInit {
       });
   }
 
+  async openCreateDepositModal(): Promise<void> {
+    const modal = await this.modalController.create({
+      component: CreateDepositModalComponent
+    });
+
+    await modal.present();
+
+    await modal.onWillDismiss()
+      .then(newDeposit => {
+        if (newDeposit.data) {
+          this.transactionService.createTransfer(newDeposit.data).subscribe(() => {
+            this.refresh$.next(undefined);
+            this.toastService.presentToast('Created a new deposit');
+          });
+        }
+      });
+  }
+
+  async openCreateWithdrawalModal(): Promise<void> {
+    const modal = await this.modalController.create({
+      component: CreateWithdrawalModalComponent
+    });
+
+    await modal.present();
+
+    await modal.onWillDismiss()
+      .then(newWithdrawal => {
+        if (newWithdrawal.data) {
+          this.transactionService.createTransfer(newWithdrawal.data).subscribe(() => {
+            this.refresh$.next(undefined);
+            this.toastService.presentToast('Created a new withdrawal');
+          });
+        }
+      });
+  }
+
   async openActionsMenu(e: any): Promise<void> {
     const popover = await this.popoverController.create({
       component: TransactionsActionsMenuComponent,
@@ -162,6 +200,11 @@ export class TransactionsPage implements OnInit {
             case TransactionAction.CREATE_TRANSFER:
               this.openCreateTransferModal();
               break;
+            case TransactionAction.CREATE_DEPOSIT:
+              this.openCreateDepositModal();
+              break;
+            case TransactionAction.CREATE_WITHDRAWAL:
+              this.openCreateWithdrawalModal();
             default:
               break;
           }

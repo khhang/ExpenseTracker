@@ -1,0 +1,21 @@
+.login-container {
+  position: relative;
+  top: 150px;
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  align-items: center;
+
+  & > * {
+    margin-bottom: 15px;
+  }
+
+}
+
+.button-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+}

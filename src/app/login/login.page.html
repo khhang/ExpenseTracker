@@ -1,0 +1,25 @@
+<ion-content class="vertical-align-content">
+  <ion-grid style="height: 100%">
+    <ion-row style="flex: auto; height: 100%">
+      <ion-col style="display: flex; justify-content: center">
+        <div style="height: 100%">
+          <div [formGroup]="loginForm" class="login-container">
+            <ion-text>Expense Tracker</ion-text>
+            <ion-item>
+              <ion-label position="stacked">Username <ion-text color="danger">*</ion-text></ion-label>
+              <ion-input formControlName="username"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">Password <ion-text color="danger">*</ion-text></ion-label>
+              <ion-input formControlName="password"></ion-input>
+            </ion-item>
+            <div class="button-container">
+              <ion-button size="small" color="primary" (click)="login()">Login</ion-button>
+              <ion-button size="small" fill="outline" color="medium">Create Account</ion-button>
+            </div>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
